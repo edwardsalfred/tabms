@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prayer Request | Tabernacle Missionary Baptist Church — The TAB</title>
+  <meta name="description" content="Submit a prayer request to Tabernacle Missionary Baptist Church in D'Iberville, Mississippi. We believe in the power of prayer.">
+  <link rel="icon" href="https://static.wixstatic.com/media/67fc74_36132ceef0cc49098deefca3e31ab717~mv2.png" type="image/png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="nav scrolled"><div class="nav-inner">
+  <a href="index.html" class="nav-logo"><img src="https://static.wixstatic.com/media/67fc74_36132ceef0cc49098deefca3e31ab717~mv2.png/v1/fill/w_198,h_198,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Church%20Logo.png" alt="TAB Logo"><div class="nav-logo-text">The TAB<span>D'Iberville, MS</span></div></a>
+  <ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="ministries.html">Ministries</a></li><li><a href="events.html">Events</a></li><li><a href="media.html">Media</a></li></ul>
+  <div class="nav-actions"><a href="giving.html" class="nav-give">Give</a><a href="contact.html" class="nav-cta">Plan Your Visit</a></div>
+  <button class="nav-hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+</div></nav>
+<div class="mobile-menu" role="dialog"><a href="index.html">Home</a><a href="about.html">About</a><a href="ministries.html">Ministries</a><a href="events.html">Events</a><a href="media.html">Media</a><div class="mobile-menu-actions"><a href="giving.html" class="btn btn-outline">Give</a><a href="contact.html" class="btn btn-primary">Plan Your Visit</a></div></div>
+
+<!-- Hero -->
+<section class="giving-cta section" style="padding-top: calc(var(--nav-h) + 80px);">
+  <div class="container text-center">
+    <span class="eyebrow will-animate" style="display:block; text-align:center;">We Pray Together</span>
+    <h1 class="will-animate" style="color:white; margin-bottom:16px;">Submit a Prayer Request</h1>
+    <p class="will-animate" style="max-width:520px; margin:0 auto;">"The prayer of a righteous person is powerful and effective." — James 5:16. Your request will be lifted before the Lord by our pastoral team.</p>
+  </div>
+</section>
+
+<!-- Prayer Form -->
+<section class="form-section section" style="padding-top:0;" aria-label="Prayer request form">
+  <div class="container-sm">
+    <form class="tab-form" name="prayer" method="POST" data-netlify="true" action="/thanks.html" aria-label="Prayer request form">
+      <input type="hidden" name="form-name" value="prayer">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pr-first">First Name</label>
+          <input type="text" id="pr-first" name="first_name" placeholder="Your first name" required>
+        </div>
+        <div class="form-group">
+          <label for="pr-last">Last Name</label>
+          <input type="text" id="pr-last" name="last_name" placeholder="Your last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="pr-email">Email Address</label>
+        <input type="email" id="pr-email" name="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label for="pr-type">Prayer Type</label>
+        <select id="pr-type" name="prayer_type">
+          <option value="">Select a category</option>
+          <option>Health &amp; Healing</option>
+          <option>Family &amp; Relationships</option>
+          <option>Financial Provision</option>
+          <option>Spiritual Growth</option>
+          <option>Grief &amp; Loss</option>
+          <option>Salvation</option>
+          <option>Praise Report</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="pr-request">Your Prayer Request *</label>
+        <textarea id="pr-request" name="prayer_request" placeholder="Share what's on your heart..." style="min-height:160px;" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-check">
+          <input type="checkbox" name="confidential" value="yes">
+          Keep this prayer request confidential (shared only with pastoral team)
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; font-size:15px; padding:16px;">
+        Submit Prayer Request
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+
+    <div style="margin-top:40px; text-align:center; padding:32px; border:1px solid rgba(255,255,255,0.08); border-radius:var(--radius-lg);">
+      <p style="font-family:var(--font-serif); font-size:20px; font-style:italic; color:rgba(255,255,255,0.7); line-height:1.6;">"Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God."</p>
+      <cite style="font-size:13px; color:var(--beige); font-style:normal; font-weight:600; display:block; margin-top:12px;">— Philippians 4:6</cite>
+    </div>
+  </div>
+</section>
+
+<footer class="footer"><div class="container"><div class="footer-grid"><div class="footer-brand"><div class="footer-logo"><img src="https://static.wixstatic.com/media/67fc74_36132ceef0cc49098deefca3e31ab717~mv2.png/v1/fill/w_198,h_198,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Church%20Logo.png" alt="The TAB" loading="lazy"><div class="footer-logo-text">Tabernacle Missionary<br>Baptist Church</div></div><p>D'Iberville, Mississippi.</p></div><div class="footer-col"><h5>Navigate</h5><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="ministries.html">Ministries</a></li><li><a href="events.html">Events</a></li></ul></div><div class="footer-col"><h5>Connect</h5><ul><li><a href="media.html">Watch Online</a></li><li><a href="giving.html">Give</a></li><li><a href="prayer.html">Prayer</a></li><li><a href="contact.html">Contact</a></li></ul></div><div class="footer-col"><h5>Service Times</h5><address class="footer-address" style="font-style:normal;"><strong style="color:rgba(255,255,255,0.6);">Sunday</strong><br>School: 8:00 AM<br>Worship: 9:00 AM<br><br><strong style="color:rgba(255,255,255,0.6);">Wednesday</strong><br>Bible Study: 6:00 PM</address></div></div><div class="footer-bottom"><span>© 2026 Tabernacle Missionary Baptist Church.</span><span>D'Iberville, MS</span></div></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competitive Analysis — Tabernacle Missionary Baptist Church</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ─── Reset & Base ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #f6f4f0;
+    --paper-card: #fffefa;
+    --ink: #1a1812;
+    --ink-muted: #6b6356;
+    --accent: #c45d3e;
+    --accent-light: #f0e4de;
+    --gold: #b8952a;
+    --border: #e0dbd3;
+    --radius: 6px;
+  }
+
+  /* Grain texture via SVG filter */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ─── Page Layout ─── */
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px;
+  }
+
+  /* ─── Cover ─── */
+  .cover {
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48px;
+    background: var(--ink);
+    border-radius: 12px;
+    margin-bottom: 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a1812 0%, #2d2318 60%, #3d2c1a 100%);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,93,62,0.2) 0%, transparent 70%);
+  }
+  .cover > * { position: relative; z-index: 1; }
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(196,93,62,0.2);
+    border: 1px solid rgba(196,93,62,0.4);
+    color: #e89070;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+  .cover h1 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 44px;
+    color: #f6f4f0;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .cover h1 em { color: #e89070; font-style: italic; }
+  .cover-meta {
+    display: flex;
+    gap: 24px;
+    color: rgba(246,244,240,0.55);
+    font-size: 13px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .cover-meta span { display: flex; align-items: center; gap: 6px; }
+
+  /* ─── Section Headers ─── */
+  .section {
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .section-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 96px;
+    color: rgba(26,24,18,0.06);
+    line-height: 1;
+    position: absolute;
+    top: -20px;
+    left: -8px;
+    font-style: italic;
+    user-select: none;
+  }
+  .section-header {
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .section-header h2 {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .section-header p {
+    color: var(--ink-muted);
+    font-size: 14px;
+  }
+  .tag-list {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .tag {
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .tag.gold {
+    background: rgba(184,149,42,0.12);
+    color: var(--gold);
+  }
+  .tag.dark {
+    background: rgba(26,24,18,0.08);
+    color: var(--ink-muted);
+  }
+
+  /* ─── Cards ─── */
+  .card {
+    background: var(--paper-card);
+    border-radius: var(--radius);
+    border-left: 4px solid var(--accent);
+    box-shadow: 0 1px 3px rgba(26,24,18,0.06), 0 4px 16px rgba(26,24,18,0.04);
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 2px 8px rgba(26,24,18,0.1), 0 8px 24px rgba(26,24,18,0.07); }
+  .card.gold-border { border-left-color: var(--gold); }
+  .card.dark-border { border-left-color: var(--ink-muted); }
+  .card-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .card-subtitle {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 16px;
+  }
+
+  /* ─── Executive Summary ─── */
+  .exec-summary {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-top: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .exec-summary p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  /* ─── Score Bar ─── */
+  .score-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .score-label { width: 130px; color: var(--ink-muted); flex-shrink: 0; }
+  .score-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; }
+  .score-bar { height: 100%; border-radius: 3px; background: var(--accent); }
+  .score-bar.gold { background: var(--gold); }
+  .score-bar.low { background: #ccc; }
+  .score-num { width: 28px; text-align: right; font-weight: 600; color: var(--ink); }
+
+  /* ─── Color Swatches ─── */
+  .swatches { display: flex; gap: 8px; margin-top: 12px; }
+  .swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid rgba(0,0,0,0.1);
+    flex-shrink: 0;
+  }
+
+  /* ─── Comparison Table ─── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 16px;
+  }
+  .comp-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--ink);
+    color: #f6f4f0;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .comp-table th:first-child { border-radius: 4px 0 0 0; }
+  .comp-table th:last-child { border-radius: 0 4px 0 0; }
+  .comp-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:nth-child(even) td { background: rgba(246,244,240,0.6); }
+  .comp-table tr.highlight-row td { background: rgba(196,93,62,0.06); font-weight: 500; }
+  .comp-table tr.client-row td {
+    background: rgba(184,149,42,0.08);
+    font-weight: 600;
+    color: #8b6914;
+  }
+  .score-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 22px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .score-pill.high { background: rgba(34,140,87,0.15); color: #1a7a4a; }
+  .score-pill.mid { background: rgba(196,93,62,0.15); color: #a34020; }
+  .score-pill.low-score { background: rgba(180,180,180,0.2); color: #777; }
+  .total-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .total-pill.best { background: #1a7a4a; color: white; }
+  .total-pill.good { background: #3a6ea8; color: white; }
+  .total-pill.ok { background: var(--ink-muted); color: white; }
+  .total-pill.weak { background: #c45d3e; color: white; }
+
+  /* ─── Patterns ─── */
+  .pattern-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .pattern-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .pattern-num {
+    font-family: 'Instrument Serif', serif;
+    font-size: 36px;
+    color: var(--accent);
+    font-style: italic;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .pattern-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .pattern-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.5; }
+
+  /* ─── SEO Grid ─── */
+  .seo-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .seo-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .seo-keyword { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .seo-diff { font-size: 11px; color: var(--ink-muted); margin-bottom: 8px; }
+  .diff-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .diff-easy { background: rgba(34,140,87,0.15); color: #1a7a4a; }
+  .diff-med { background: rgba(196,93,62,0.15); color: #a34020; }
+
+  /* ─── Design Direction ─── */
+  .direction-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .direction-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+  .direction-card h4 {
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 12px;
+  }
+  .palette { display: flex; gap: 6px; margin-bottom: 8px; }
+  .palette-chip {
+    height: 32px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.08);
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    padding: 3px 5px;
+  }
+  .palette-chip span { font-size: 9px; font-weight: 600; opacity: 0.7; }
+
+  /* ─── Divider ─── */
+  .divider {
+    position: relative;
+    text-align: center;
+    margin: 48px 0;
+  }
+  .divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider span {
+    position: relative;
+    background: var(--paper);
+    padding: 0 16px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Connector lines ─── */
+  .connector {
+    display: flex;
+    justify-content: center;
+    margin: -12px 0;
+    position: relative;
+    z-index: 1;
+  }
+  .connector svg { color: var(--border); }
+
+  /* ─── Footer ─── */
+  .report-footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ink-muted);
+    font-size: 12px;
+  }
+
+  /* ─── Print / PDF ─── */
+  @media print {
+    body { background: white; font-size: 13px; }
+    body::before { display: none; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card, .exec-summary, .pattern-card, .seo-card, .direction-card { box-shadow: none !important; }
+    .section { page-break-inside: avoid; }
+    .comp-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 40px 32px; }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 640px) {
+    .page { padding: 32px 20px; }
+    .cover { padding: 32px 24px; }
+    .cover h1 { font-size: 30px; }
+    .pattern-grid { grid-template-columns: 1fr; }
+    .seo-grid { grid-template-columns: 1fr 1fr; }
+    .direction-grid { grid-template-columns: 1fr; }
+    .section-num { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════ COVER -->
+  <div class="cover">
+    <div class="cover-badge">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3v3l2 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Competitive Analysis Report
+    </div>
+    <h1>Website Intelligence<br><em>for The TAB</em></h1>
+    <p style="color: rgba(246,244,240,0.65); font-size: 15px; margin-top: 8px;">Tabernacle Missionary Baptist Church — D'Iberville, Mississippi</p>
+    <div class="cover-meta">
+      <span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 1v2M8 1v2M1 5h10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        March 31, 2026
+      </span>
+      <span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1C3.79 1 2 2.79 2 5c0 3.25 4 6 4 6s4-2.75 4-6c0-2.21-1.79-4-4-4z" stroke="currentColor" stroke-width="1.2"/><circle cx="6" cy="5" r="1.5" stroke="currentColor" stroke-width="1.2"/></svg>
+        D'Iberville, MS
+      </span>
+      <span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 9.5l2.5-2.5 2 2L10 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        5 Competitors Analyzed
+      </span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 1: EXECUTIVE SUMMARY -->
+  <div class="section">
+    <div class="section-num">1</div>
+    <div class="section-header">
+      <h2>Executive Summary</h2>
+      <p>The strategic landscape and immediate opportunity</p>
+      <div class="tag-list">
+        <span class="tag">Key Findings</span>
+        <span class="tag gold">High Opportunity</span>
+      </div>
+    </div>
+
+    <div class="exec-summary">
+      <p>
+        Tabernacle Missionary Baptist Church — "The TAB" — operates a Wix-based website that currently scores near the bottom of every measurable category when compared to its regional competitors. The most pressing issue is that the site still carries Wix's default title "My Site," signaling to search engines and visitors alike that the site is unfinished. With 13+ active ministries, a dedicated pastor, and a clear community mission, The TAB has significantly more program depth than its template-level presentation suggests.
+      </p>
+      <p style="margin-top: 14px;">
+        The competitive gap is wide — but entirely closeable. The top competitor (Pinelake Church) operates at a professional media-organization level with a custom-built WordPress site, video heroes, and multi-campus presence. However, the more relevant benchmark for D'Iberville is Brandon Baptist Church: a single-campus Mississippi church with a clean Squarespace execution that scores 59/80 — more than double The TAB's estimated 23/80. A targeted redesign can close that gap in one build cycle.
+      </p>
+      <p style="margin-top: 14px;">
+        <strong>The single biggest opportunity: local SEO.</strong> "Church D'Iberville MS" and "Baptist church D'Iberville Mississippi" are low-competition keywords with no dominant local winner. The TAB is positioned to own them the moment it has a properly titled, schema-marked website.
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 2: COMPETITOR PROFILES -->
+  <div class="section">
+    <div class="section-num">2</div>
+    <div class="section-header">
+      <h2>Competitor Profiles</h2>
+      <p>Deep analysis of the top 5 church websites in the regional competitive set</p>
+      <div class="tag-list">
+        <span class="tag">5 Sites Analyzed</span>
+        <span class="tag dark">Mississippi + Southeast</span>
+      </div>
+    </div>
+
+    <!-- Competitor 1: Pinelake -->
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+        <div>
+          <div class="card-title">#1 — Pinelake Church</div>
+          <div class="card-subtitle">pinelake.org &nbsp;·&nbsp; Multiple MS Locations &nbsp;·&nbsp; Custom WordPress</div>
+        </div>
+        <div class="total-pill best">70 / 80</div>
+      </div>
+
+      <div class="swatches" style="margin-bottom:16px;">
+        <div class="swatch" style="background:#1a1a2e;" title="#1a1a2e Deep Navy"></div>
+        <div class="swatch" style="background:#f8f5ee;" title="#f8f5ee Warm White"></div>
+        <div class="swatch" style="background:#b89a3a;" title="#b89a3a Gold Accent"></div>
+        <div class="swatch" style="background:#d4cfc6;" title="#d4cfc6 Warm Gray"></div>
+      </div>
+
+      <div class="score-row"><span class="score-label">Search Visibility</span><div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div><span class="score-num">9</span></div>
+      <div class="score-row"><span class="score-label">Visual Design</span><div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div><span class="score-num">9</span></div>
+      <div class="score-row"><span class="score-label">Content Depth</span><div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div><span class="score-num">9</span></div>
+      <div class="score-row"><span class="score-label">CTA Strategy</span><div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div><span class="score-num">9</span></div>
+      <div class="score-row"><span class="score-label">Social Proof</span><div class="score-bar-wrap"><div class="score-bar" style="width:80%"></div></div><span class="score-num">8</span></div>
+
+      <div style="margin-top:16px; font-size:13px; color:var(--ink-muted); line-height:1.6;">
+        <strong style="color:var(--ink)">Why they win:</strong> "One State. One Story. One Church." is a masterclass in geographic brand positioning. Three-pathway CTA (Connect / Engage / Grow) immediately below the video hero eliminates visitor confusion. Weekly sermon content keeps Google happy. Their biggest weapon: they publish a small-group discussion guide with every sermon — this creates dozens of keyword-rich pages per year.
+      </div>
+      <div class="tag-list" style="margin-top:12px;">
+        <span class="tag">Video Hero</span>
+        <span class="tag">3-Path CTA</span>
+        <span class="tag dark">Multi-Location</span>
+      </div>
+    </div>
+
+    <!-- Competitor 2: Brown MBC -->
+    <div class="card gold-border">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+        <div>
+          <div class="card-title">#2 — Brown Missionary Baptist Church</div>
+          <div class="card-subtitle">brownbaptist.org &nbsp;·&nbsp; Southaven, MS &nbsp;·&nbsp; Custom WordPress</div>
+        </div>
+        <div class="total-pill good">63 / 80</div>
+      </div>
+
+      <div class="swatches" style="margin-bottom:16px;">
+        <div class="swatch" style="background:#6b1a2d;" title="#6b1a2d Deep Maroon"></div>
+        <div class="swatch" style="background:#ffffff;" title="#ffffff White"></div>
+        <div class="swatch" style="background:#c9a227;" title="#c9a227 Gold"></div>
+        <div class="swatch" style="background:#2c2c2c;" title="#2c2c2c Charcoal"></div>
+      </div>
+
+      <div class="score-row"><span class="score-label">Content Depth</span><div class="score-bar-wrap"><div class="score-bar gold" style="width:90%"></div></div><span class="score-num">9</span></div>
+      <div class="score-row"><span class="score-label">Visual Design</span><div class="score-bar-wrap"><div class="score-bar gold" style="width:80%"></div></div><span class="score-num">8</span></div>
+      <div class="score-row"><span class="score-label">CTA Strategy</span><div class="score-bar-wrap"><div class="score-bar gold" style="width:80%"></div></div><span class="score-num">8</span></div>
+      <div class="score-row"><span class="score-label">Search Visibility</span><div class="score-bar-wrap"><div class="score-bar gold" style="width:80%"></div></div><span class="score-num">8</span></div>
+      <div class="score-row"><span class="score-label">Social Proof</span><div class="score-bar-wrap"><div class="score-bar gold" style="width:70%"></div></div><span class="score-num">7</span></div>
+
+      <div style="margin-top:16px; font-size:13px; color:var(--ink-muted); line-height:1.6;">
+        <strong style="color:var(--ink)">Why they win:</strong> The daily devotional blog is their secret weapon — it generates fresh SEO-indexed content every single day at near-zero cost. Their "dfree" financial freedom program is a unique community differentiator that no competitor offers. Vimeo video hero signals professionalism immediately.
+      </div>
+      <div class="tag-list" style="margin-top:12px;">
+        <span class="tag gold">Daily Devotional</span>
+        <span class="tag gold">dfree Program</span>
+        <span class="tag dark">Dual Campus</span>
+      </div>
+    </div>
+
+    <!-- Competitor 3: Brandon BC -->
+    <div class="card dark-border">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+        <div>
+          <div class="card-title">#3 — Brandon Baptist Church</div>
+          <div class="card-subtitle">brandonbc.org &nbsp;·&nbsp; Brandon, MS &nbsp;·&nbsp; Squarespace</div>
+        </div>
+        <div class="total-pill good">59 / 80</div>
+      </div>
+
+      <div class="swatches" style="margin-bottom:16px;">
+        <div class="swatch" style="background:#1b2d4e;" title="#1b2d4e Navy"></div>
+        <div class="swatch" style="background:#ffffff;" title="#ffffff White"></div>
+        <div class="swatch" style="background:#8b9eb3;" title="#8b9eb3 Steel Blue"></div>
+        <div class="swatch" style="background:#f2f0ec;" title="#f2f0ec Off-White"></div>
+      </div>
+
+      <div class="score-row"><span class="score-label">Mobile</span><div class="score-bar-wrap"><div class="score-bar low" style="width:80%"></div></div><span class="score-num">8</span></div>
+      <div class="score-row"><span class="score-label">Visual Design</span><div class="score-bar-wrap"><div class="score-bar low" style="width:80%"></div></div><span class="score-num">8</span></div>
+      <div class="score-row"><span class="score-label">Page Speed</span><div class="score-bar-wrap"><div class="score-bar low" style="width:80%"></div></div><span class="score-num">8</span></div>
+      <div class="score-row"><span class="score-label">CTA Strategy</span><div class="score-bar-wrap"><div class="score-bar low" style="width:80%"></div></div><span class="score-num">8</span></div>
+
+      <div style="margin-top:16px; font-size:13px; color:var(--ink-muted); line-height:1.6;">
+        <strong style="color:var(--ink)">Most relevant benchmark for The TAB:</strong> Single-campus Mississippi church, similar size, built on a no-code platform (Squarespace). Scores 59/80 with clean photography, dual CTAs ("Plan Your Visit" + "Watch Recent Sermon"), and emphasis on discipleship journey. This is the minimum floor The TAB should reach — and surpass.
+      </div>
+      <div class="tag-list" style="margin-top:12px;">
+        <span class="tag">Clean Design</span>
+        <span class="tag">Dual CTA</span>
+        <span class="tag dark">Best Benchmark</span>
+      </div>
+    </div>
+
+    <!-- Competitor 4 & 5 compact -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="card dark-border" style="margin-bottom:0;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <div><div class="card-title" style="font-size:16px;">#4 — First African BC</div><div class="card-subtitle" style="font-size:12px;">Savannah, GA · Custom HTML</div></div>
+          <div class="total-pill ok">54</div>
+        </div>
+        <p style="font-size:12px; color:var(--ink-muted);">248-year heritage = unbeatable authority. Weak design, strong story. Lesson: history IS social proof.</p>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Heritage</span><span class="tag dark">History Tours</span></div>
+      </div>
+      <div class="card dark-border" style="margin-bottom:0;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <div><div class="card-title" style="font-size:16px;">#5 — Meadowview BC</div><div class="card-subtitle" style="font-size:12px;">Starkville, MS · Snappages</div></div>
+          <div class="total-pill weak">47</div>
+        </div>
+        <p style="font-size:12px; color:var(--ink-muted);">Template design, but solid events calendar. The TAB's events depth could far exceed this.</p>
+        <div class="tag-list" style="margin-top:10px;"><span class="tag dark">Events</span><span class="tag dark">Template</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 3: COMPARISON TABLE -->
+  <div class="section">
+    <div class="section-num">3</div>
+    <div class="section-header">
+      <h2>Side-by-Side Comparison</h2>
+      <p>All 6 sites scored across 8 criteria — where The TAB stands today and where it needs to go</p>
+    </div>
+
+    <div style="overflow-x:auto;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Church</th>
+            <th>Search</th>
+            <th>Design</th>
+            <th>Mobile</th>
+            <th>Content</th>
+            <th>Social Proof</th>
+            <th>CTA</th>
+            <th>Speed</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight-row">
+            <td><strong>Pinelake Church</strong></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="total-pill best">70</span></td>
+          </tr>
+          <tr>
+            <td>Brown MBC</td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill mid">7</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill mid">7</span></td>
+            <td><span class="total-pill good">63</span></td>
+          </tr>
+          <tr>
+            <td>Brandon BC</td>
+            <td><span class="score-pill mid">7</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill mid">7</span></td>
+            <td><span class="score-pill mid">6</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="total-pill good">59</span></td>
+          </tr>
+          <tr>
+            <td>First African BC</td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill low-score">4</span></td>
+            <td><span class="score-pill low-score">4</span></td>
+            <td><span class="score-pill high">8</span></td>
+            <td><span class="score-pill high">9</span></td>
+            <td><span class="score-pill mid">6</span></td>
+            <td><span class="score-pill low-score">5</span></td>
+            <td><span class="total-pill ok">54</span></td>
+          </tr>
+          <tr>
+            <td>Meadowview BC</td>
+            <td><span class="score-pill mid">6</span></td>
+            <td><span class="score-pill low-score">5</span></td>
+            <td><span class="score-pill mid">6</span></td>
+            <td><span class="score-pill mid">7</span></td>
+            <td><span class="score-pill low-score">5</span></td>
+            <td><span class="score-pill mid">6</span></td>
+            <td><span class="score-pill mid">6</span></td>
+            <td><span class="total-pill weak">47</span></td>
+          </tr>
+          <tr class="client-row">
+            <td>⚡ The TAB (current)</td>
+            <td><span class="score-pill low-score">1</span></td>
+            <td><span class="score-pill low-score">3</span></td>
+            <td><span class="score-pill low-score">5</span></td>
+            <td><span class="score-pill low-score">4</span></td>
+            <td><span class="score-pill low-score">2</span></td>
+            <td><span class="score-pill low-score">3</span></td>
+            <td><span class="score-pill low-score">5</span></td>
+            <td><span class="total-pill weak">~23</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:12px; color:var(--ink-muted); margin-top:10px;">Scores are 1–10 per criterion. Total is sum of all 8 criteria (max 80). The TAB's mobile score of 5 reflects Wix's baseline responsiveness — not intentional design.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 4: SEO LANDSCAPE -->
+  <div class="section">
+    <div class="section-num">4</div>
+    <div class="section-header">
+      <h2>SEO Landscape</h2>
+      <p>Keyword opportunities The TAB can own with a properly built website</p>
+      <div class="tag-list">
+        <span class="tag">Local SEO</span>
+        <span class="tag gold">Immediate Wins Available</span>
+      </div>
+    </div>
+
+    <div class="seo-grid">
+      <div class="seo-card">
+        <div class="seo-keyword">"church D'Iberville MS"</div>
+        <div><span class="diff-badge diff-easy">Easy Win</span></div>
+        <div class="seo-diff" style="margin-top:6px;">No dominant local result. #1 ranking available immediately.</div>
+      </div>
+      <div class="seo-card">
+        <div class="seo-keyword">"Baptist church D'Iberville"</div>
+        <div><span class="diff-badge diff-easy">Easy Win</span></div>
+        <div class="seo-diff" style="margin-top:6px;">Direct brand category keyword. Low competition.</div>
+      </div>
+      <div class="seo-card">
+        <div class="seo-keyword">"Tabernacle Missionary Baptist"</div>
+        <div><span class="diff-badge diff-easy">Brand</span></div>
+        <div class="seo-diff" style="margin-top:6px;">Must-own brand keyword. Currently returning weak results.</div>
+      </div>
+      <div class="seo-card">
+        <div class="seo-keyword">"church near me D'Iberville"</div>
+        <div><span class="diff-badge diff-easy">Local Pack</span></div>
+        <div class="seo-diff" style="margin-top:6px;">Schema markup unlocks Google local 3-pack entry.</div>
+      </div>
+      <div class="seo-card">
+        <div class="seo-keyword">"Black church Biloxi area"</div>
+        <div><span class="diff-badge diff-med">Medium</span></div>
+        <div class="seo-diff" style="margin-top:6px;">Geographic expansion into the larger metro search area.</div>
+      </div>
+      <div class="seo-card">
+        <div class="seo-keyword">"Sunday worship South Mississippi"</div>
+        <div><span class="diff-badge diff-med">Medium</span></div>
+        <div class="seo-diff" style="margin-top:6px;">Regional intent keyword for seekers moving to the area.</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px; background: rgba(196,93,62,0.06); border-left-color: var(--accent);">
+      <strong>Critical Fix Required:</strong> The site title "Home | My Site" must be changed to "Tabernacle Missionary Baptist Church | D'Iberville, MS — The TAB" immediately. This single change will produce measurable search improvement within 2–4 weeks of Google re-crawling the site.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 5: PATTERNS OF TOP 10% -->
+  <div class="section">
+    <div class="section-num">5</div>
+    <div class="section-header">
+      <h2>Patterns of the Top 10%</h2>
+      <p>What every winning church website does that The TAB currently doesn't</p>
+    </div>
+
+    <div class="pattern-grid">
+      <div class="pattern-card">
+        <div class="pattern-num">01</div>
+        <div class="pattern-title">Video or Full-Bleed Photography Hero</div>
+        <div class="pattern-desc">Top sites open with a cinematic moment — no carousels, no stock photos. One powerful image or loop video with 12–16 words of white-text headline. The TAB has real photography; it just needs intentional curation.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">02</div>
+        <div class="pattern-title">Three-Path Welcome Framework</div>
+        <div class="pattern-desc">Connect / Grow / Serve (or Plan Your Visit / Watch / Get Involved). Top sites never leave new visitors guessing. Three clear pathways below the hero eliminates bounce and guides the first-time guest.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">03</div>
+        <div class="pattern-title">Weekly Fresh Content Engine</div>
+        <div class="pattern-desc">Sermons, devotionals, event recaps — something new every week. Brown MBC's daily devotional is their #1 SEO driver. The TAB's media content and pastor's messages could power this engine.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">04</div>
+        <div class="pattern-title">Real Congregation Photography</div>
+        <div class="pattern-desc">Authentic > polished. Competitors use real people, real moments, real facilities. The TAB already has excellent event photography — the What's Happening page has dozens of usable images waiting to be featured.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">05</div>
+        <div class="pattern-title">Mobile-First Information Hierarchy</div>
+        <div class="pattern-desc">Service times, location, and how-to-visit within 2 mobile scrolls. 70%+ of church site traffic is mobile — first-time visitors looking up service times on Sunday morning. This must be frictionless.</div>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">06</div>
+        <div class="pattern-title">Social Proof Above the Fold</div>
+        <div class="pattern-desc">Top sites quantify community: "7 Campuses," "15,000+ weekly attenders," testimonial quotes, member stories. The TAB's 13+ ministries and active community are an untold story. Numbers and stories build trust.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ 6: DESIGN DIRECTION -->
+  <div class="section">
+    <div class="section-num">6</div>
+    <div class="section-header">
+      <h2>Recommended Design Direction</h2>
+      <p>Data-backed design decisions for the new website build</p>
+      <div class="tag-list">
+        <span class="tag">Brand-Informed</span>
+        <span class="tag gold">Competitor-Validated</span>
+      </div>
+    </div>
+
+    <div class="direction-grid">
+      <div class="direction-card">
+        <h4>Recommended Palette</h4>
+        <div class="palette">
+          <div class="palette-chip" style="background:#0d0d0d; flex:2;">
+            <span style="color:white">#0d0d0d</span>
+          </div>
+          <div class="palette-chip" style="background:#c45d3e;">
+            <span style="color:white">#c45d3e</span>
+          </div>
+          <div class="palette-chip" style="background:#e8c89a;">
+            <span style="color:#333">#e8c89a</span>
+          </div>
+          <div class="palette-chip" style="background:#f8f5ef; flex:2; border:1px solid #ddd;">
+            <span style="color:#666">#f8f5ef</span>
+          </div>
+        </div>
+        <p style="font-size:12px; color:var(--ink-muted);">Black retains logo fidelity. Terracotta accent adds warmth. Warm beige nods to existing brand. Cream background for sections.</p>
+      </div>
+
+      <div class="direction-card">
+        <h4>Typography Pairing</h4>
+        <p style="font-family:'Instrument Serif',serif; font-size:22px; line-height:1.2; margin-bottom:8px;">Instrument Serif<br><em style="font-size:16px;">for headings</em></p>
+        <p style="font-family:'DM Sans',sans-serif; font-size:13px; color:var(--ink-muted);">DM Sans for body copy, labels, and navigation. Both free via Google Fonts. Seen in top-tier church and editorial sites — serious but warm.</p>
+      </div>
+
+      <div class="direction-card">
+        <h4>Animation Style</h4>
+        <p style="font-size:13px; color:var(--ink-muted); line-height:1.6;">
+          GSAP ScrollTrigger: fade-up reveals for text, stagger for card grids, parallax on hero photography. Inspired by Pinelake's cinematic homepage scroll.
+          <br><br>
+          Avoid: carousels, auto-playing sliders, hover-to-reveal content.
+        </p>
+      </div>
+
+      <div class="direction-card">
+        <h4>Photography Direction</h4>
+        <p style="font-size:13px; color:var(--ink-muted); line-height:1.6;">
+          Pull from the What's Happening gallery — it's full of authentic congregation moments. Hero: wide shot, Sunday service, congregation in worship. Ministry cards: real ministry leaders, not placeholder images.
+          <br><br>
+          Tone: joyful, genuine, community-oriented.
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title">What to AVOID (Competitor Data)</div>
+      <ul style="font-size:13px; color:var(--ink-muted); line-height:2; padding-left:20px; margin-top:8px;">
+        <li>Photo carousels — all top sites use single hero moments</li>
+        <li>Wix/template visual signatures (floating elements, thin dividers)</li>
+        <li>Cluttered homepage — every top church limits the hero to 1 headline + 1–2 CTAs</li>
+        <li>Broken ministry card images — the current grid damages credibility</li>
+        <li>Generic CTAs — "More About Us Here!" has zero conversion power</li>
+        <li>Vague Facebook/social links — broken social links signal abandonment</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ FOOTER -->
+  <div class="report-footer">
+    <div>
+      <strong>Tabernacle Missionary Baptist Church</strong><br>
+      D'Iberville, Mississippi &nbsp;·&nbsp; thetabms.com
+    </div>
+    <div style="text-align:right;">
+      Research conducted March 31, 2026<br>
+      Powered by Firecrawl + Website Intelligence
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
